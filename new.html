@@ -1,0 +1,225 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Insert title here</title>
+<script type="text/javascript" src="json2.js"></script>
+<script type="text/javascript" src="JSON.js"></script>
+<script type="text/javascript" src="json_sans_eval.js"></script>
+<script type="text/javascript" src="json_parse.js"></script>
+<!--  CSS to modify style of body and table tags --> 
+
+<style type="text/css">
+<!--
+.style4{font-family: Verdana, Arial, Helvetica, sans-serif; color: #000000;background-color:blue; text-align:center;}
+.old{font-family:Verdana,Arial;color:blue;text-align:center}
+body{background-image:url("lightblue.jpg");}
+.style7 {color: #000000;}
+th {font-family: Verdana, Arial, Helvetica, sans-serif; font-weight: bold; color: #000000; background-color:blue;text-align:center}
+td {font-family: Verdana, Arial, Helvetica, sans-serif; color: #000000;background-color:blue; text-align:center}
+-->
+</style>
+
+
+<!-- Java Script function to create XMLHttpRequest Object-->
+<script language="Javascript" type="text/javascript">
+function createreq()
+{
+	var XML;
+try
+{
+if(window.ActiveXObject)
+{
+	
+	XML=new ActiveXObject("Microsoft.XMLHTTP");
+	
+	return XML;
+}
+}
+catch(e)
+{
+	alert("Problem creating Microsoft.XMLHTTP"+e);
+}
+try
+{
+if(window.XMLHttpRequest)
+{
+	XML=new XMLHttpRequest();
+	return XML;
+}
+}
+catch(e)
+{
+	alert("Problem creating "+e);
+}
+try
+{
+if (!XML){ 
+    XML=new ActiveXObject("Msxml2.XMLHTTP");
+    return XML; 
+} 
+}
+catch(e)
+{
+	alert(e);}
+return XML;
+
+}
+
+/* Function startreq to post data to server */
+
+function startreq()
+{
+	
+	var XML=new XMLHttpRequest();
+	
+	var id=document.getElementById('req').value;
+	var query="req="+document.getElementById('req').value;
+	var query2="pass="+document.getElementById('pass').value;
+	var q=query+"&"+query2;
+	XML.onreadystatechange=function(){handle(XML,id)};
+	XML.open("POST","http://localhost/web/univ2/newfile.php?",true);
+	XML.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	XML.setRequestHeader("Content-length", query.length);
+	XML.setRequestHeader("Connection", "close");
+	XML.send(q);
+	alert("Welcome!!!!");
+	
+}
+
+/* To handle response from server */
+
+function handle(XML,id)
+{
+	
+	if(XML.readyState==0) //checks whether the XMLHttpRequest object state is zero
+	{
+		
+	}
+	if(XML.readyState==1)//checks whether the XMLHttpRequest object state is one
+	{
+		
+	}
+		if(XML.readyState==2)//checks whether the XMLHttpRequest object state is two
+		{
+		
+		}
+			if(XML.readyState==3)//checks whether the XMLHttpRequest object state is three
+			{
+		
+			}
+	if(XML.readyState==4)//checks whether the XMLHttpRequest object state is four. Four siginifies the response has been fully parsed
+	{
+		
+		
+		if(XML.status==200)//Http status 200 indicates success
+		{
+			/* The received JSON object is parsed using jsonParse function to get value for a particular object name*/
+			var string=XML.responseText;
+			var st=string.split(";");
+			var section=st[0];
+			var course=jsonParse(st[1]);
+			var time1=jsonParse(st[2]);
+			var day1=jsonParse(st[3]);
+			var count1=jsonParse(st[4]);
+			var room1=jsonParse(st[5]);
+			var waitsec=jsonParse(st[6]);
+			var waitcno=jsonParse(st[7]);
+			var waittime=jsonParse(st[8]);
+			var waitday=jsonParse(st[9]);
+			var waitcount=jsonParse(st[10]);
+			var room=jsonParse(st[11]);
+			var sect=jsonParse(section);
+			
+			var j=st.length;
+			document.write("<body background=\"lightblue.jpg\">");
+			document.write("<table border=\"1\" cellpadding=\"5\" cellspacing=\"5\" width=\"100%\">");
+			document.write("<tr><th class=\"style4\" width=\"20%\">Section No<\/th><th width=\"20%\">Course No<\/th><th width=\"20%\">Time<\/th><th width=\"20%\">Day<\/th><th width=\"20%\">Number of students<\/th><th width=\"20%\">Room No<\/th><\/tr>");
+			
+			/* Printing the object's value in a table */
+			for(var i=0; i<sect.sec.length; i++)
+			{
+				document.write("<h4>No of students currently enrolled");
+			document.write("<tr><td width=\"20%\">");
+			document.write(sect.sec[i]);
+			document.write("<\/td>");
+			document.write("<td width=\"20%\">");
+			document.write(course.cno[i]);
+			document.write("<\/td width=\"20%\">");
+			document.write("<td>");
+			document.write(time1.time[i]);
+			document.write("<\/td width=\"20%\">");
+			document.write("<td>");
+			document.write(day1.day[i]);
+			document.write("<\/td width=\"20%\">");
+			document.write("<td>");
+			document.write(count1.count[i]);
+			document.write("<\/td>");
+			document.write("<td width=\"20%\">");
+			document.write(room1.room[i]);
+			document.write("<\/td><\/tr>");
+			}
+			document.write("<\/table>");
+
+			document.write("<table border=\"1\" cellpadding=\"5\" cellspacing=\"5\" width=\"100%\">");
+			document.write("<tr><th width=\"20%\">Section No<\/th><th width=\"20%\">Course No<\/th><th width=\"20%\">Time<\/th><th width=\"20%\">Day<\/th><th width=\"20%\">Number of students<\/th><th width=\"20%\">Room No<\/th><\/tr>");
+			for(var i=0; i<waitsec.sec1.length; i++)
+			{
+				document.write("<br><br>");
+				document.write("<h4>No of students currently in waiting list");
+			document.write("<tr><td width=\"20%\">");
+			document.write(waitsec.sec1[i]);
+			document.write("<\/td>");
+			document.write("<td width=\"20%\">");
+			document.write(waitcno.cno1[i]);
+			document.write("<\/td width=\"20%\">");
+			document.write("<td>");
+			document.write(waittime.time1[i]);
+			document.write("<\/td width=\"20%\">");
+			document.write("<td>");
+			document.write(waitday.day1[i]);
+			document.write("<\/td width=\"20%\">");
+			document.write("<td>");
+			document.write(waitcount.count1[i]);
+			document.write("<\/td>");
+			document.write("<td width=\"20%\">");
+			document.write(room.room1[i]);
+			document.write("<\/td><\/tr>");
+			
+			}
+			document.write("<\/table>");
+			document.write("<br><br>");
+			/* The following form helps the intructor to view the semesters he/she has teached so far */
+			document.write("<form method=\"POST\" action=\"old.php\">");
+			document.write("Click <input type=\"submit\" value=\"Here\">to know number of students enrolled in a course in previous semesters");
+			document.write("<input type=\"hidden\" name=\"req1\" value='"+id+"'>"); 
+			document.write("<\/form>");
+			
+		}
+		else
+		{
+			alert("there was a problem");
+		}
+	}
+}
+</script>
+
+</head>
+<body >
+Hi!!!!!
+<p name="para" id="p1">
+ </p>
+ <div id="div"></div>
+ <table id="tab">
+ 
+ </table>
+ <table>
+ <tR>
+ <!-- Allows instructore to enter instructor id and password and invoke startreq javascript function -->
+ <td>Enter Instructor ID:<td><input type=text name="req" id="req"></input></td></td></tR>
+ <br></br>
+ <tr><td>Enter Password:<td><input type=password name="pass" id="pass"></input></td></td></tr>
+ <tr><tD><input type=submit onclick="startreq();"></input></tD></tr>
+ </table>
+ </body>
+</html>
